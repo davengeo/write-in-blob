@@ -16,8 +16,7 @@ class TestContainer(containers.DeclarativeContainer):
     log_processor_service = providers.Resource(init_logger_processor,
                                                config_file=config.logging.config_file,
                                                logger=config.logging.logger,
-                                               level=config.logging.level
-                                               )
+                                               level=config.logging.level)
     processors_service = providers.List(log_processor_service, )
     report_service = providers.Resource(init_report,
                                         attributes=config.cloudevents,
@@ -28,11 +27,8 @@ class TestContainer(containers.DeclarativeContainer):
                                  path_json=config.vault.path_json),
         little=providers.Singleton(VaultLittle,
                                    url=config.vault.url,
-                                   env=config.vault.env)
-    )
-    # noinspection Mypy
+                                   env=config.vault.env))
     blob_writer_service = providers.Factory(BlobWriterHandler,
                                             service_url=config.azure_blob.url,
                                             vault=vault_service,
-                                            report=report_service
-                                            )
+                                            report=report_service)
