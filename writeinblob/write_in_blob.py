@@ -1,3 +1,4 @@
+import json
 from typing import Any, Tuple, Union
 from urllib import parse
 
@@ -36,12 +37,12 @@ class BlobWriterHandler(MessageHandler):
         self.__report.add_event_with_type(event_type='message received',
                                           record={
                                               'from_queue': self.__origin,
-                                              'length': len(message.body)
+                                              'length': len(message.body),
+                                              'headers': message.headers
                                           })
         blob_name: str = build_blob_name(origin=self.__origin)
-        client = self.__blob_service.get_blob_client(container=self.__container,
-                                                     blob='{}.body'.format(blob_name))
-        client.upload_blob(message.body, overwrite=True)
+        self.save_body(blob_name, message.body)
+        self.save_headers(blob_name, message.headers)
         self.__report.add_event_with_type(event_type='message processed',
                                           record={
                                               'blob_name': blob_name,
@@ -49,6 +50,19 @@ class BlobWriterHandler(MessageHandler):
                                               'container': self.__container
                                           })
         message.ack()
+
+    def save_headers(self, blob_name: str, headers: dict):
+        content: str = json.dumps(headers)
+        client = self.__blob_service.get_blob_client(container=self.__container,
+                                                     blob='{}.headers'.format(blob_name))
+        client.upload_blob(content, overwrite=True)
+        client.close()
+
+    def save_body(self, blob_name: str, body: str):
+        client = self.__blob_service.get_blob_client(container=self.__container,
+                                                     blob='{}.body'.format(blob_name))
+        client.upload_blob(body, overwrite=True)
+        client.close()
 
 
 class BadParamsException(ValueError):
