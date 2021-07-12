@@ -29,9 +29,8 @@ class BlobWriterHandler(MessageHandler):
             raise BadParamsException(params=params)
         self.__origin = params[0]
         self.__container = params[1]
-        key = parse.urlparse(self.__service).netloc
         self.__blob_service = BlobServiceClient.from_connection_string(
-            self.__vault.read_secret(key)['conn_string'])
+            self.__vault.read_secret(parse.urlparse(self.__service).netloc)['conn_string'])
 
     def handler(self, body: Any, message: Message) -> None:
         self.__report.add_event_with_type(event_type='message received',
