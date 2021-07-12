@@ -29,6 +29,7 @@ class TestContainer(containers.DeclarativeContainer):
                                    url=config.vault.url,
                                    env=config.vault.env))
     blob_writer_service = providers.Factory(BlobWriterHandler,
+                                            container=config.azure_blob.container,
                                             service_url=config.azure_blob.url,
                                             vault=vault_service,
                                             report=report_service)
