@@ -28,7 +28,8 @@ def test_should_create_instance() -> None:
     write: write_in_blob.BlobWriterHandler = ct.blob_writer_service()
     write.setup(params=('from_test', 'messages'))
     write.handler(body=json.dumps(body),
-                  message=Message(body=json.dumps(body), channel=Connection(transport=Transport).channel()))
+                  message=Message(body=json.dumps(body),
+                                  channel=Connection(transport=Transport).channel()))
     time.sleep(3)
     ct.shutdown_resources()
     time.sleep(3)

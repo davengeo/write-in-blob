@@ -3,7 +3,7 @@ from typing import Any, Tuple
 from urllib import parse
 
 from azure.storage.blob import BlobServiceClient, BlobClient
-from dependency_injector.wiring import Provide
+from dependency_injector.wiring import Provide, inject
 from devopstoolsdaven.reports.report import Report
 from devopstoolsdaven.vault.vault import Vault
 from kombu import Message
@@ -14,22 +14,22 @@ from .name_convention import build_blob_name
 
 class BlobWriterHandler(MessageHandler):
     __origin: str = ''
-    __container: str = ''
 
-    def __init__(self, service_url: str,
+    @inject
+    def __init__(self, service_url: str, container: str,
                  vault: Vault = Provide['vault_service'],
                  report: Report = Provide['report_service']) -> None:
         self.__service: str = service_url
+        self.__container: str = container
         self.__vault: Vault = vault
         self.__report: Report = report
         self.__blob_service: BlobServiceClient = BlobServiceClient.from_connection_string(
             self.__vault.read_secret(parse.urlparse(self.__service).netloc)['conn_string'])
 
     def setup(self, params: Tuple[Any, ...]) -> None:
-        if len(params) < 2 or not isinstance(params[0], str) or not isinstance(params[1], str):
+        if len(params) < 1 or not isinstance(params[0], str):
             raise BadParamsException(params=params)
         self.__origin = params[0]
-        self.__container = params[1]
 
     def handler(self, body: Any, message: Message) -> None:
         self.__report.add_event_with_type(event_type='message received',

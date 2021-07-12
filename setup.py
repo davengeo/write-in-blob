@@ -4,10 +4,10 @@ from setuptools import setup
 setup(
     author="David Navarro Alvarez",
     author_email="me@davengeo.com",
-    description="message handler to write blobs in different cloud storages",
-    url="https://github.com/davengeo/devops-tools",
+    description="message handler to write blobs in different cloud storage providers",
+    url="https://github.com/davengeo/write-in-blob",
     name="write-in-blob",
-    version='0.0.2',
+    version='0.0.3',
     packages=[
         'writeinblob',
     ],
