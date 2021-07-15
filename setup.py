@@ -7,7 +7,7 @@ setup(
     description="message handler to write blobs in different cloud storage providers",
     url="https://github.com/davengeo/write-in-blob",
     name="write-in-blob",
-    version='0.0.3',
+    version='0.0.4',
     packages=[
         'writeinblob',
     ],

@@ -26,7 +26,7 @@ def test_should_create_instance() -> None:
     ct = build_container()
     body: dict = {'test': 'messages'}
     write: write_in_blob.BlobWriterHandler = ct.blob_writer_service()
-    write.setup(params=('from_test', ))
+    write.setup(params={'origin': 'from_test'})
     write.handler(body=json.dumps(body),
                   message=Message(body=json.dumps(body),
                                   channel=Connection(transport=Transport).channel()))
