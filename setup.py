@@ -7,14 +7,14 @@ setup(
     description="message handler to write blobs in different cloud storage providers",
     url="https://github.com/davengeo/write-in-blob",
     name="write-in-blob",
-    version='0.0.4',
+    version='0.0.5',
     packages=[
         'writeinblob',
     ],
     install_requires=[
         'azure-storage-blob',
         'dependency-injector>=4.0,<5.0',
-        'messagehandler-ifn==0.1.0',
+        'messagehandler-ifn==0.2.0',
         'devops-tools-daven==0.0.14',
         'kombu'
     ],
